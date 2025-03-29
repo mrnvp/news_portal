@@ -6,6 +6,23 @@ News
 
 {% block content %}
 <h2>Все новости</h2>
+
+<form action = '' method = 'get'>
+    <div>
+        <label for="id_name">Название:</label>
+        {{ filterset.form.name }}
+    </div>
+    <div>
+        <label for="id_author">Автор:</label>
+        {{ filterset.form.author }}
+    </div>
+    <div>
+        <label for="id_datetime_in">Позже даты:</label>
+        {{ filterset.form.datetime_in }}
+    </div>
+<input type = 'submit' value = 'Найти'/>
+</form>
+
 {% if posts %}
     <table>
         <tr>
@@ -24,4 +41,27 @@ News
 {% else %}
     <h2>Новостей нет!</h2>
 {% endif %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">1</a>
+            {% if page_obj.previous_page_number != 1 %}
+            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+            {% endif %}
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% endif %}
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    </span>
+</div>
+
 {% endblock content %}
