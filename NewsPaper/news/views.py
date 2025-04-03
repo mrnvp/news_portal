@@ -5,6 +5,9 @@ from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 
 class PostList(ListView):
     model = Post
@@ -48,7 +51,7 @@ class PostCreate(CreateView):
         form.save_m2m()
         return super().form_valid(form)
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
@@ -104,13 +107,7 @@ class PostDelete(DeleteView):
             raise Http404("Запрошенная статья не найдена.")
 
         return super().dispatch(request, *args, **kwargs)
-    
-    
         
-        
-    
-
-            
 
     
 
