@@ -5,6 +5,10 @@ News
 {% endblock title %}
 
 {% block content %}
+{% if user.is_authenticated %}
+{% if is_not_authors %}
+<button> <a href="upgrade/"> Стать автором!</a> </button>
+{% endif %}
 <h2>Все новости</h2>
 
 <form action = '' method = 'get'>
@@ -63,5 +67,9 @@ News
         {% endif %}
     </span>
 </div>
+{% else %}
+    <p>Вы не авторизованы.</p>
+    <a href="/accounts/login/">Войти</a>
+{% endif %}
 
 {% endblock content %}

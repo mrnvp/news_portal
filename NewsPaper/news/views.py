@@ -1,12 +1,14 @@
 from django.http import Http404
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 class PostList(ListView):
@@ -26,7 +28,22 @@ class PostList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+        
+        if self.request.user.is_authenticated:
+             context['is_not_authors'] = not self.request.user.groups.filter(name='authors').exists()
+        else:
+            context['is_not_authors'] = True
+            
         return context
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    authors_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        authors_group.user_set.add(user)
+    return redirect('/')
+
     
 class PostDetail(DetailView):
     model = Post
@@ -34,7 +51,8 @@ class PostDetail(DetailView):
     template_name = 'new.html'
     context_object_name = 'post'
     
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post', )
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
@@ -51,7 +69,8 @@ class PostCreate(CreateView):
         form.save_m2m()
         return super().form_valid(form)
 
-class PostUpdate(LoginRequiredMixin, UpdateView):
+class PostUpdate(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = ('news.changed_post')
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
