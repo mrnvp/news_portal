@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,11 +160,11 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'sign.models.CommonSignupForm'}
 
-EMAIL_HOST = 'smtp.yandex.ru'  
-EMAIL_PORT = 465  
-EMAIL_HOST_USER = 'mironovap0li' 
-EMAIL_HOST_PASSWORD = 'zvledrceopgtmjgw'  
-EMAIL_USE_SSL = True  
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 
 SITE_URL = 'http://127.0.0.1:8000'
 
