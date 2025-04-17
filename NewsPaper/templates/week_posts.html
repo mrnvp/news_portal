@@ -8,9 +8,9 @@
 <body>
     <h2>Привет! Здесь все выпущенные статьи за неделю в вашей избранной категории</h2>
     <ul>
-        {% for post in posts %}
-            <li><a href="{{ link }}{{ post.get_absolute_url }}">{{ post.name }}</a></li>
-        {% endfor %}
+       {% for post in posts %}
+        <li><a href="{{ link }}{{ post.get_absolute_url }}">{{ post.name }}: {{ post.preview }}</a></li>
+        {% endfor %} 
     </ul>
 </body>
 </html>

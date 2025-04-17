@@ -19,32 +19,30 @@ from django.core.mail import EmailMultiAlternatives
 logger = logging.getLogger(__name__)
  
  
-# наша задача по выводу текста на экран
 def my_job():
     today = datetime.datetime.now()
-    last_week = today - datetime.timedelta(days = 7)
-    posts = Post.objects.filter(datetime_in__gte = last_week).distinct()
-    categories = set(posts.values_list('category__name', flat = True))
-    subscribers = set(Category.objects.filter(name__in = categories).values_list('subscribers__email', flat = True))
-    html_content = render_to_string(
-       'week_posts.html',
-       {
-           'link': settings.SITE_URL,
-           'posts': posts,
-               
-       } 
-    )
+    # last_week = today - datetime.timedelta(days = 7)
+    # posts = Post.objects.filter(datetime_in__gte = last_week).distinct()
+    # categories = set(posts.values_list('category__name', flat = True))
+    # subscribers = set(Category.objects.filter(name__in = categories).values_list('subscribers__email', flat = True))
+    # html_content = render_to_string(
+    #    'week_posts.html',
+    #    {
+    #        'link': settings.SITE_URL,
+    #        'posts': posts,    
+    #    } 
+    # )
     
-    msg = EmailMultiAlternatives(
-        subject = 'Все статьи за неделю',
-        body = '',
-        from_email = settings.DEFAULT_FROM_EMAIL,
-        to = subscribers,
+    # msg = EmailMultiAlternatives(
+    #     subject = 'Все статьи за неделю',
+    #     body = '',
+    #     from_email = settings.DEFAULT_FROM_EMAIL,
+    #     to = subscribers,
     
-    )
+    # )
     
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
+    # msg.attach_alternative(html_content, 'text/html')
+    # msg.send()
  
 # функция, которая будет удалять неактуальные задачи
 def delete_old_job_executions(max_age=604_800):
