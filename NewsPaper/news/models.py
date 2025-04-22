@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from datetime import datetime
 
+from django.core.cache import cache
+
 class Author(models.Model):
     rating = models.FloatField()
     
@@ -63,6 +65,12 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         return reverse("post_detail", args=[str(self.id)])
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs) 
+        cache.delete(f'news-{self.pk}')
+    
+    
     
     
     
