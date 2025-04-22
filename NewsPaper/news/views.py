@@ -11,6 +11,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
+
+
+
 class PostList(ListView):
     model = Post
     

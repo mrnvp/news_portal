@@ -1,5 +1,6 @@
 {% extends 'flatpages/default.html' %}
 {%load custom_filters%}
+{% load cache %}
 {% block title %}
 News
 {% endblock title %}
@@ -10,7 +11,7 @@ News
 <button> <a href="upgrade/"> Стать автором!</a> </button>
 {% endif %}
 <h2>Все новости</h2>
-
+{% cache 300 "news_filter" %}
 <form action = '' method = 'get'>
     <div>
         <label for="id_name">Название:</label>
@@ -26,6 +27,7 @@ News
     </div>
 <input type = 'submit' value = 'Найти'/>
 </form>
+{% endcache %}
 
 {% if posts %}
     <table>
@@ -46,6 +48,7 @@ News
     <h2>Новостей нет!</h2>
 {% endif %}
 
+{% cache 600 "news_pagination" %}
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -67,6 +70,7 @@ News
         {% endif %}
     </span>
 </div>
+{% endcache %}
 {% else %}
     <p>Вы не авторизованы.</p>
     <a href="/accounts/login/">Войти</a>
