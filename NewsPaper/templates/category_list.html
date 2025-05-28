@@ -1,5 +1,7 @@
 {% extends 'flatpages/default.html' %}
 {%load custom_filters%}
+{% load cache %}
+{% load i18n %}
 {% block title %}
 News
 {% endblock title %}
@@ -12,8 +14,9 @@ News
 {% if is_not_subscriber %}
 <button> <a href="{% url 'subscribe' category.id %}"> Подписаться!</a> </button>
 {% endif %}
-<h2>Все новости</h2>
-{% cache 300 "category_filter" %}
+
+<h2>{%trans "Все новости"%}</h2>
+{%cache 300 "category_filter" %}
 <form action = '' method = 'get'>
     <div>
         <label for="id_name">Название:</label>
@@ -34,10 +37,10 @@ News
 {% if category_news_list %}
     <table>
         <tr>
-            <td>Заголовок</td>
-            <td>Дата публикации</td>
-            <td>Текст</td>
-            <td>Категория</td>
+            <td>{%trans "Заголовок"%}</td>
+            <td>{%trans "Дата публикации"%}</td>
+            <td>{%trans "Текст"%}</td>
+            <td>{%trans "Категория"%}</td>
         </tr>
         {% for category_new in category_news_list %}
         <tr>
@@ -55,7 +58,7 @@ News
         {% endfor %}
     </table>
 {% else %}
-    <h2>Новостей нет!</h2>
+    <h2>{%trans "Новостей нет!"%}</h2>
 {% endif %}
 {% cache 600 "category_pagination" %}
 <div class="pagination">
@@ -82,7 +85,7 @@ News
 {% endcache %}
 {% else %}
 
-    <p>Вы не авторизованы.</p>
+    <p>{%trans "Вы не авторизованы."%}</p>
     <a href="/accounts/login/">Войти</a>
 {% endif %}
 
